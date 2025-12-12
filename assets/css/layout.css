@@ -28,7 +28,13 @@
 }
 
 .topbar__left{ display:flex; flex-direction:column; }
-.topbar__right{ display:flex; align-items:center; gap: 10px; flex-wrap: wrap; }
+
+.topbar__right{
+  display:flex;
+  align-items:flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
 .content{
   padding: 0 20px 24px;
