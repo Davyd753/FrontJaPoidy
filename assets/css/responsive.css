@@ -8,16 +8,17 @@
   .sidebar{ width: auto; }
   .main{ width: 100%; }
   .topbar{ flex-direction: column; align-items: stretch; }
-  .topbar__right{ justify-content: space-between; }
-  .search{ min-width: 0; flex: 1; }
+  .topbar__right{ justify-content: flex-start; }
+  .dropdown{ min-width: 160px; }
 }
 
 @media (max-width: 480px){
   .content{ padding: 0 12px 18px; }
   .topbar{ padding: 14px 12px; }
   .card{ padding: 12px; }
+
   .table__head > div:last-child,
   .table__row > div:last-child{ flex-basis: 92px; }
 
-  .control{ min-width: 120px; }
+  .dropdown{ min-width: 140px; }
 }
