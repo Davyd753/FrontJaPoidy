@@ -14,50 +14,81 @@
 
 <body>
   <div class="app">
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="brand">
         <div class="brand__logo">EX</div>
-        <div>
+        <div class="brand__text">
           <div class="brand__name">Exchange</div>
           <div class="brand__sub">Dashboard</div>
         </div>
       </div>
 
       <nav class="nav">
-        <button class="nav__item is-active" data-i18n="nav.overview"><span class="nav__dot"></span>Overview</button>
-        <button class="nav__item" data-i18n="nav.markets"><span class="nav__dot"></span>Markets</button>
-        <button class="nav__item" data-i18n="nav.orders"><span class="nav__dot"></span>Orders</button>
-        <button class="nav__item" data-i18n="nav.wallet"><span class="nav__dot"></span>Wallet</button>
-        <button class="nav__item" data-i18n="nav.settings"><span class="nav__dot"></span>Settings</button>
+        <button class="nav__item is-active" data-view="overview" data-i18n="nav.overview">
+          <span class="nav__dot"></span> Overview
+        </button>
+        <button class="nav__item" data-view="markets" data-i18n="nav.markets">
+          <span class="nav__dot"></span> Markets
+        </button>
+        <button class="nav__item" data-view="orders" data-i18n="nav.orders">
+          <span class="nav__dot"></span> Orders
+        </button>
+        <button class="nav__item" data-view="wallet" data-i18n="nav.wallet">
+          <span class="nav__dot"></span> Wallet
+        </button>
+        <button class="nav__item" data-view="settings" data-i18n="nav.settings">
+          <span class="nav__dot"></span> Settings
+        </button>
       </nav>
+
+      <div class="sidebar__footer">
+        <div class="mini-card">
+          <div class="mini-card__title" data-i18n="status.title">Status</div>
+          <div class="mini-card__row">
+            <span class="badge badge--ok" data-i18n="status.online">Online</span>
+            <span class="muted" data-i18n="status.api">API: Connected</span>
+          </div>
+        </div>
+      </div>
     </aside>
 
+    <!-- MAIN -->
     <div class="main">
       <header class="topbar">
-        <div>
+        <div class="topbar__left">
           <h1 class="title" data-i18n="title.overview">Exchange Overview</h1>
-          <p class="subtitle" data-i18n="subtitle.overview">Key metrics, markets and recent trades.</p>
+          <p class="subtitle" data-i18n="subtitle.overview">Key metrics, markets, and recent trades.</p>
         </div>
 
         <div class="topbar__right">
+          <!-- Custom dropdowns -->
           <div class="controls">
-            <label class="control">
-              <span class="control__label" data-i18n="ui.language">Language</span>
-              <select id="langSelect" class="control__select">
-                <option value="en">English</option>
-                <option value="ru">Русский</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
-              </select>
-            </label>
+            <div class="dropdown" data-dropdown="lang">
+              <div class="dropdown__label" data-i18n="ui.language">Language</div>
+              <button class="dropdown__btn" type="button" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+                <span class="dropdown__value" id="langValue">English</span>
+                <span class="dropdown__icon" aria-hidden="true">▾</span>
+              </button>
+              <div class="dropdown__menu" id="langMenu" role="listbox" tabindex="-1">
+                <button class="dropdown__item" type="button" role="option" data-value="en">English</button>
+                <button class="dropdown__item" type="button" role="option" data-value="ru">Русский</button>
+                <button class="dropdown__item" type="button" role="option" data-value="es">Español</button>
+                <button class="dropdown__item" type="button" role="option" data-value="fr">Français</button>
+              </div>
+            </div>
 
-            <label class="control">
-              <span class="control__label" data-i18n="ui.theme">Theme</span>
-              <select id="themeSelect" class="control__select">
-                <option value="light" data-i18n="ui.themeLight">Light</option>
-                <option value="dark" data-i18n="ui.themeDark">Dark</option>
-              </select>
-            </label>
+            <div class="dropdown" data-dropdown="theme">
+              <div class="dropdown__label" data-i18n="ui.theme">Theme</div>
+              <button class="dropdown__btn" type="button" id="themeBtn" aria-haspopup="listbox" aria-expanded="false">
+                <span class="dropdown__value" id="themeValue">Light</span>
+                <span class="dropdown__icon" aria-hidden="true">▾</span>
+              </button>
+              <div class="dropdown__menu" id="themeMenu" role="listbox" tabindex="-1">
+                <button class="dropdown__item" type="button" role="option" data-value="light" data-i18n="ui.themeLight">Light</button>
+                <button class="dropdown__item" type="button" role="option" data-value="dark" data-i18n="ui.themeDark">Dark</button>
+              </div>
+            </div>
           </div>
 
           <button class="btn btn--ghost" id="btnRefresh" data-i18n="btn.refresh">Refresh</button>
@@ -66,9 +97,75 @@
       </header>
 
       <main class="content">
+        <section class="kpi">
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label" data-i18n="kpi.balance">Balance</div>
+                <div class="card__value" id="balance">$12,480.55</div>
+              </div>
+              <span class="badge badge--soft">USD</span>
+            </div>
+            <div class="card__foot">
+              <span class="trend trend--up">▲ +2.4%</span>
+              <span class="muted" data-i18n="meta.24h">last 24h</span>
+            </div>
+          </article>
+
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label" data-i18n="kpi.pnl">PnL</div>
+                <div class="card__value" id="pnl">+$342.10</div>
+              </div>
+              <span class="badge badge--ok" data-i18n="meta.profit">Profit</span>
+            </div>
+            <div class="card__foot">
+              <span class="trend trend--up">▲ +1.1%</span>
+              <span class="muted" data-i18n="meta.week">this week</span>
+            </div>
+          </article>
+
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label" data-i18n="kpi.volume">Volume</div>
+                <div class="card__value" id="volume">$1.28M</div>
+              </div>
+              <span class="badge badge--soft">Spot</span>
+            </div>
+            <div class="card__foot">
+              <span class="trend trend--down">▼ -0.6%</span>
+              <span class="muted" data-i18n="meta.24h">last 24h</span>
+            </div>
+          </article>
+
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label" data-i18n="kpi.openOrders">Open orders</div>
+                <div class="card__value" id="openOrders">7</div>
+              </div>
+              <span class="badge badge--soft" data-i18n="meta.active">Active</span>
+            </div>
+            <div class="card__foot">
+              <span class="muted" data-i18n="meta.updated">Last update:</span>
+              <span class="muted" id="lastUpdate">—</span>
+            </div>
+          </article>
+        </section>
+
         <section class="grid">
           <article class="card">
-            <h2 class="h2" data-i18n="sec.markets">Markets</h2>
+            <div class="card__title-row">
+              <h2 class="h2" data-i18n="sec.markets">Markets</h2>
+              <div class="segmented" role="tablist">
+                <button class="segmented__btn is-active" data-filter="all" data-i18n="seg.all">All</button>
+                <button class="segmented__btn" data-filter="gainers" data-i18n="seg.gainers">Gainers</button>
+                <button class="segmented__btn" data-filter="losers" data-i18n="seg.losers">Losers</button>
+              </div>
+            </div>
+
             <div class="table">
               <div class="table__head">
                 <div data-i18n="tbl.pair">Pair</div>
@@ -77,6 +174,42 @@
                 <div class="ta-r" data-i18n="tbl.volume">Volume</div>
               </div>
               <div class="table__body" id="marketsTable"></div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card__title-row">
+              <h2 class="h2" data-i18n="sec.quickOrder">Quick order</h2>
+              <span class="badge badge--soft">Demo</span>
+            </div>
+
+            <div class="order">
+              <div class="order__actions">
+                <button class="btn btn--success" data-i18n="btn.buy">Buy</button>
+                <button class="btn btn--danger" data-i18n="btn.sell">Sell</button>
+              </div>
+
+              <div class="note" data-i18n="note.tip">
+                Tip: click Refresh to see prices move in the table.
+              </div>
+            </div>
+          </article>
+
+          <article class="card grid__wide">
+            <div class="card__title-row">
+              <h2 class="h2" data-i18n="sec.recentTrades">Recent trades</h2>
+              <button class="btn btn--ghost btn--sm" id="btnAddTrade" data-i18n="btn.addTrade">Add demo trade</button>
+            </div>
+
+            <div class="table table--compact">
+              <div class="table__head">
+                <div data-i18n="tbl.time">Time</div>
+                <div data-i18n="tbl.pair">Pair</div>
+                <div data-i18n="tbl.side">Side</div>
+                <div class="ta-r" data-i18n="tbl.price">Price</div>
+                <div class="ta-r" data-i18n="tbl.qty">Qty</div>
+              </div>
+              <div class="table__body" id="tradesTable"></div>
             </div>
           </article>
         </section>
