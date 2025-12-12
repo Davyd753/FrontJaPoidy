@@ -1,35 +1,17 @@
 :root{
-  /* Brand */
-  --brand-500:#818cf8;
-  --brand-300:#a5b4fc;
-  --brand-grad: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
+  --brand:#818cf8;
+  --brand-soft:rgba(129,140,248,.15);
 
-  /* Surfaces / text */
   --bg:#f1f5f9;
-  --card:white;
+  --card:#ffffff;
+
   --text:#334155;
   --muted:#94a3b8;
-  --slate-600:#3c4a5f;
 
-  /* Brand glows */
-  --brand-05: rgba(129, 140, 248, 0.05);
-  --brand-15: rgba(129, 140, 248, 0.15);
-  --brand-35: rgba(129, 140, 248, 0.35);
+  --success:#10b981;
+  --danger:#ef4444;
 
-  /* Shadow ring */
-  --ring: 0 0 0 4px rgba(129, 140, 248, 0.15);
-
-  /* Status */
-  --green:#10b981;
-  --red:#ef4444;
-
-  /* Radius */
-  --r-12: 12px;
-  --r-16: 16px;
-
-  /* Shadows */
-  --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-  --shadow-sm: 0 8px 20px rgba(15, 23, 42, 0.06);
+  --ring:0 0 0 4px rgba(129,140,248,.15);
 }
 
 :root[data-theme="dark"]{
@@ -38,8 +20,6 @@
 
   --text:#f1f5f9;
   --muted:#94a3b8;
-  --slate-600:#cbd5e1;
 
-  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-  --shadow-sm: 0 10px 24px rgba(0, 0, 0, 0.28);
+  --brand-soft:rgba(129,140,248,.25);
 }
