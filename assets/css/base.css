@@ -1,5 +1,6 @@
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
+
 body{
   margin:0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
@@ -7,9 +8,7 @@ body{
   background: var(--bg);
 }
 
-button,input,select{
-  font: inherit;
-}
+button,input,select{ font: inherit; }
 
 .muted{ color:var(--muted); }
 .ta-r{ text-align:right; }
