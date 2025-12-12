@@ -142,7 +142,13 @@
 .badge--soft{ background: var(--brand-05); border-color: var(--brand-15); }
 .badge--ok{ background: rgba(16,185,129,0.10); border-color: rgba(16,185,129,0.25); color: var(--green); }
 
-.trend{ font-weight: 900; font-size: 13px; white-space: nowrap; }
+.trend{
+  font-weight: 900;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .trend--up{ color: var(--green); }
 .trend--down{ color: var(--red); }
 
@@ -179,7 +185,7 @@
   box-shadow: none;
 }
 
-/* Table */
+/* Table (default: flex) */
 .table{
   border-radius: var(--r-26);
   overflow:hidden;
@@ -194,18 +200,17 @@
   user-select:none;
 }
 
-/* БАЗОВА РОЗМІТКА КОЛОНОК */
 .table__head > div, .table__row > div{
   flex: 1 1 0;
-  min-width: 0;                 /* ключове для flex */
-  overflow: hidden;             /* 🔧 фікс: не лізе в сусідню колонку */
-  text-overflow: ellipsis;      /* 🔧 фікс: ... */
-  white-space: nowrap;          /* 🔧 фікс: не переносить під інші колонки */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Для 4-колоночної таблиці (Markets) залишаємо останню ширшою */
+/* Markets table (4 cols) last column fixed */
 .table:not(.table--compact) .table__head > div:last-child,
-.table:not(.table--compact) .table__row > div:last-child{
+.table:not(.table--compact) .table__row  > div:last-child{
   flex: 0 0 120px;
 }
 
@@ -218,20 +223,6 @@
   transition: background 160ms ease;
 }
 .table__row:hover{ background: rgba(129, 140, 248, 0.07); }
-
-.pair{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  min-width:0;
-}
-.pair__icon{
-  width: 30px; height: 30px;
-  border-radius: var(--r-18);
-  background: var(--brand-15);
-  box-shadow: inset 0 0 0 2px var(--brand-300);
-  flex: 0 0 auto;
-}
 
 /* Quick order */
 .order__actions{ display:flex; gap: 10px; margin-bottom: 10px; }
@@ -294,7 +285,6 @@
   pointer-events: none;
   transition: opacity 160ms ease, transform 160ms ease;
 }
-
 .dropdown.is-open .dropdown__menu{
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -330,18 +320,28 @@
   box-shadow: 0 24px 70px rgba(0,0,0,0.55);
 }
 
-/* ✅ ФІКС САМЕ ДЛЯ "Recent trades" (5 колонок) */
-.table--compact .table__head > div:nth-child(1),
-.table--compact .table__row  > div:nth-child(1){ flex: 0 0 88px; }   /* Time */
+/* ✅ ГОЛОВНИЙ ФІКС: Recent trades = GRID (не накладається ніколи) */
+.table--compact .table__head,
+.table--compact .table__row{
+  display: grid;
+  grid-template-columns: 92px minmax(140px, 1fr) 92px 140px 92px;
+  column-gap: 10px;
+  align-items: center;
+}
 
-.table--compact .table__head > div:nth-child(2),
-.table--compact .table__row  > div:nth-child(2){ flex: 1 1 160px; }  /* Pair */
+/* Для grid потрібно прибрати flex-логіку колонок */
+.table--compact .table__head > div,
+.table--compact .table__row  > div{
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-.table--compact .table__head > div:nth-child(3),
-.table--compact .table__row  > div:nth-child(3){ flex: 0 0 92px; }   /* Side */
-
-.table--compact .table__head > div:nth-child(4),
-.table--compact .table__row  > div:nth-child(4){ flex: 0 0 128px; }  /* Price */
-
-.table--compact .table__head > div:nth-child(5),
-.table--compact .table__row  > div:nth-child(5){ flex: 0 0 88px; }   /* Qty */
+/* На дуже вузьких екранах — трохи стискаємо */
+@media (max-width: 420px){
+  .table--compact .table__head,
+  .table--compact .table__row{
+    grid-template-columns: 86px minmax(120px, 1fr) 86px 128px 86px;
+  }
+}
