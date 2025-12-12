@@ -142,7 +142,7 @@
 .badge--soft{ background: var(--brand-05); border-color: var(--brand-15); }
 .badge--ok{ background: rgba(16,185,129,0.10); border-color: rgba(16,185,129,0.25); color: var(--green); }
 
-.trend{ font-weight: 900; font-size: 13px; }
+.trend{ font-weight: 900; font-size: 13px; white-space: nowrap; }
 .trend--up{ color: var(--green); }
 .trend--down{ color: var(--red); }
 
@@ -193,8 +193,21 @@
   font-size: 12px;
   user-select:none;
 }
-.table__head > div, .table__row > div{ flex: 1 1 0; min-width: 0; }
-.table__head > div:last-child, .table__row > div:last-child{ flex: 0 0 120px; }
+
+/* БАЗОВА РОЗМІТКА КОЛОНОК */
+.table__head > div, .table__row > div{
+  flex: 1 1 0;
+  min-width: 0;                 /* ключове для flex */
+  overflow: hidden;             /* 🔧 фікс: не лізе в сусідню колонку */
+  text-overflow: ellipsis;      /* 🔧 фікс: ... */
+  white-space: nowrap;          /* 🔧 фікс: не переносить під інші колонки */
+}
+
+/* Для 4-колоночної таблиці (Markets) залишаємо останню ширшою */
+.table:not(.table--compact) .table__head > div:last-child,
+.table:not(.table--compact) .table__row > div:last-child{
+  flex: 0 0 120px;
+}
 
 .table__body{ background: rgba(255,255,255,0.90); }
 :root[data-theme="dark"] .table__body{ background: rgba(15, 23, 42, 0.25); }
@@ -316,3 +329,19 @@
   border-color: rgba(129, 140, 248, 0.14);
   box-shadow: 0 24px 70px rgba(0,0,0,0.55);
 }
+
+/* ✅ ФІКС САМЕ ДЛЯ "Recent trades" (5 колонок) */
+.table--compact .table__head > div:nth-child(1),
+.table--compact .table__row  > div:nth-child(1){ flex: 0 0 88px; }   /* Time */
+
+.table--compact .table__head > div:nth-child(2),
+.table--compact .table__row  > div:nth-child(2){ flex: 1 1 160px; }  /* Pair */
+
+.table--compact .table__head > div:nth-child(3),
+.table--compact .table__row  > div:nth-child(3){ flex: 0 0 92px; }   /* Side */
+
+.table--compact .table__head > div:nth-child(4),
+.table--compact .table__row  > div:nth-child(4){ flex: 0 0 128px; }  /* Price */
+
+.table--compact .table__head > div:nth-child(5),
+.table--compact .table__row  > div:nth-child(5){ flex: 0 0 88px; }   /* Qty */
