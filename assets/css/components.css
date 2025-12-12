@@ -1,20 +1,295 @@
-.control__select{
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid rgba(148,163,184,.4);
+/* ---------- Animations (global feel) ---------- */
+@keyframes pop {
+  from { transform: translateY(2px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* Brand */
+.brand{ display:flex; gap: 12px; align-items:center; }
+.brand__logo{
+  width:42px; height:42px;
+  border-radius: var(--r-18);
+  background: var(--brand-grad);
+  display:flex; align-items:center; justify-content:center;
+  color:white; font-weight: 800;
+  box-shadow: 0 12px 26px rgba(99, 102, 241, 0.25);
+}
+.brand__name{ font-weight: 800; }
+.brand__sub{ color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+.nav{ display:flex; flex-direction: column; gap: 8px; }
+.nav__item{
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: var(--r-18);
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color: var(--slate-600);
+  cursor:pointer;
+
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.nav__item:hover{ transform: translateY(-1px); background: var(--brand-05); }
+.nav__item:active{ transform: translateY(0) scale(0.99); }
+.nav__dot{
+  width:10px; height:10px;
+  border-radius:999px;
+  background: var(--brand-15);
+  box-shadow: inset 0 0 0 2px var(--brand-300);
+}
+.nav__item.is-active{
+  background: var(--brand-05);
+  border-color: var(--brand-15);
+  color: var(--text);
+  box-shadow: 0 12px 30px rgba(129, 140, 248, 0.12);
+}
+
+.sidebar__footer{ margin-top:auto; }
+.mini-card{
+  border-radius: var(--r-22);
+  padding: 12px;
+  background: var(--brand-05);
+  border: 1px solid var(--brand-15);
+}
+.mini-card__title{ font-size: 12px; color: var(--muted); }
+.mini-card__row{ margin-top: 10px; display:flex; align-items:center; justify-content: space-between; }
+
+/* Cards */
+.card{
+  background: var(--card);
+  border-radius: var(--r-22);
+  padding: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  animation: pop 220ms ease both;
+}
+.card__title-row{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.card__head{ display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; }
+.card__label{ color: var(--muted); font-size: 12px; }
+.card__value{ font-size: 22px; font-weight: 800; margin-top: 4px; }
+.card__foot{ margin-top: 10px; display:flex; align-items:center; justify-content: space-between; }
+
+/* Buttons */
+.btn{
+  border: 1px solid transparent;
+  border-radius: var(--r-18);
+  padding: 10px 12px;
+  cursor:pointer;
   background: var(--card);
   color: var(--text);
+
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease, filter 160ms ease;
+  will-change: transform;
+}
+.btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(129, 140, 248, 0.14);
+}
+.btn:active{ transform: translateY(0) scale(0.99); }
+.btn--sm{ padding: 8px 10px; border-radius: var(--r-18); }
+.btn--ghost{ background: transparent; border-color: rgba(148, 163, 184, 0.35); }
+.btn--primary{
+  background: var(--brand-grad);
+  color:white;
+  box-shadow: 0 14px 28px rgba(99, 102, 241, 0.24);
+}
+.btn--primary:hover{ filter: brightness(1.02); }
+.btn--success{
+  background: rgba(16, 185, 129, 0.10);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--green);
+}
+.btn--danger{
+  background: rgba(239, 68, 68, 0.10);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: var(--red);
 }
 
-/* 🔧 ФІКС: селекти й текст у dark mode */
-:root[data-theme="dark"] select,
-:root[data-theme="dark"] option{
-  background-color:#0f172a;
-  color:#f1f5f9;
+/* Badges / trends */
+.badge{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: var(--brand-05);
+}
+.badge--soft{ background: var(--brand-05); border-color: var(--brand-15); }
+.badge--ok{ background: rgba(16, 185, 129, 0.10); border-color: rgba(16, 185, 129, 0.25); color: var(--green); }
+
+.trend{ font-weight: 700; font-size: 13px; }
+.trend--up{ color: var(--green); }
+.trend--down{ color: var(--red); }
+
+/* KPI layout */
+.kpi__card{ flex: 1 1 220px; min-width: 220px; }
+
+/* Segmented */
+.segmented{
+  display:flex;
+  gap: 6px;
+  padding: 6px;
+  background: var(--brand-05);
+  border: 1px solid var(--brand-15);
+  border-radius: var(--r-22);
+}
+.segmented__btn{
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: var(--r-18);
+  cursor:pointer;
+  color: var(--slate-600);
+
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+.segmented__btn:hover{ transform: translateY(-1px); background: rgba(129,140,248,0.06); }
+.segmented__btn:active{ transform: translateY(0) scale(0.99); }
+.segmented__btn.is-active{
+  background: rgba(255,255,255,0.85);
+  border-color: rgba(148, 163, 184, 0.28);
 }
 
-/* щоб dropdown не ламався у Chrome */
-select option{
-  background-color:inherit;
-  color:inherit;
+/* Tables */
+.table{
+  border-radius: var(--r-22);
+  overflow:hidden;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+.table__head, .table__row{ display:flex; align-items:center; gap: 10px; }
+.table__head{
+  padding: 10px 12px;
+  background: var(--brand-05);
+  color: var(--muted);
+  font-size: 12px;
+}
+.table__head > div, .table__row > div{ flex: 1 1 0; }
+.table__head > div:last-child, .table__row > div:last-child{ flex: 0 0 120px; }
+
+.table__body{ background: rgba(255,255,255,0.85); }
+.table__row{
+  padding: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.18);
+  transition: background 160ms ease;
+}
+.table__row:hover{ background: rgba(129, 140, 248, 0.07); }
+
+.pair{ display:flex; align-items:center; gap: 10px; }
+.pair__icon{
+  width: 30px; height: 30px;
+  border-radius: var(--r-18);
+  background: var(--brand-15);
+  box-shadow: inset 0 0 0 2px var(--brand-300);
+}
+
+/* Order */
+.order{ display:flex; flex-direction: column; gap: 10px; }
+.order__actions{ display:flex; gap: 10px; }
+.order__actions .btn{ flex:1; }
+
+.note{
+  padding: 10px 12px;
+  border-radius: var(--r-22);
+  background: var(--brand-05);
+  border: 1px solid var(--brand-15);
+  color: var(--slate-600);
+}
+
+/* ---------- Custom Dropdown (fix for dark theme) ---------- */
+.controls{
+  display:flex;
+  align-items:flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dropdown{ position: relative; min-width: 170px; }
+.dropdown__label{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+
+.dropdown__btn{
+  width: 100%;
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 10px 12px;
+  border-radius: var(--r-22);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(255,255,255,0.85);
+  color: var(--text);
+  cursor:pointer;
+
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+.dropdown__btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 18px 34px rgba(129, 140, 248, 0.14);
+}
+.dropdown__btn:active{ transform: translateY(0) scale(0.99); }
+.dropdown__icon{
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.dropdown__menu{
+  position:absolute;
+  left:0; right:0;
+  top: calc(100% + 8px);
+  border-radius: var(--r-22);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.18);
+  overflow:hidden;
+
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.dropdown.is-open .dropdown__menu{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.dropdown__item{
+  width:100%;
+  text-align:left;
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  cursor:pointer;
+
+  transition: background 140ms ease, transform 140ms ease;
+}
+.dropdown__item:hover{
+  background: rgba(129, 140, 248, 0.10);
+  transform: translateX(2px);
+}
+.dropdown__item.is-active{
+  background: rgba(129, 140, 248, 0.15);
+}
+
+/* Dark theme surfaces */
+:root[data-theme="dark"] .dropdown__btn{
+  background: rgba(129, 140, 248, 0.05);
+  border-color: rgba(129, 140, 248, 0.15);
+}
+:root[data-theme="dark"] .dropdown__menu{
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(129, 140, 248, 0.14);
+  box-shadow: 0 22px 55px rgba(0,0,0,0.45);
+}
+:root[data-theme="dark"] .table__body{
+  background: rgba(15, 23, 42, 0.25);
 }
