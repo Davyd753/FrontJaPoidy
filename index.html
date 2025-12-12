@@ -5,537 +5,41 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Exchange Dashboard</title>
 
-  <style>
-    :root{
-      --brand-500:#818cf8;
-      --brand-300:#a5b4fc;
-      --brand-05: rgba(129, 140, 248, 0.05);
-      --brand-15: rgba(129, 140, 248, 0.15);
-      --brand-35: rgba(129, 140, 248, 0.35);
-      --brand-grad: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
-
-      --bg:#f1f5f9;
-      --card:#ffffff;
-      --text:#334155;
-      --muted:#94a3b8;
-      --slate-600:#3c4a5f;
-
-      --ring: 0 0 0 4px rgba(129, 140, 248, 0.15);
-
-      --green:#10b981;
-      --red:#ef4444;
-
-      --r-16:16px;
-      --r-20:20px;
-      --r-24:24px;
-
-      --shadow: 0 18px 46px rgba(15, 23, 42, 0.10);
-      --shadow-sm: 0 12px 30px rgba(15, 23, 42, 0.08);
-
-      --border: rgba(148, 163, 184, 0.22);
-      --border-strong: rgba(148, 163, 184, 0.35);
-    }
-
-    :root[data-theme="dark"]{
-      --bg:#0b1220;
-      --card:#0f172a;
-      --text:#f1f5f9;
-      --muted:#94a3b8;
-      --slate-600:#cbd5e1;
-
-      --shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
-      --shadow-sm: 0 14px 34px rgba(0, 0, 0, 0.32);
-
-      --border: rgba(129, 140, 248, 0.14);
-      --border-strong: rgba(129, 140, 248, 0.20);
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    :focus-visible{
-      outline:none;
-      box-shadow: var(--ring);
-      border-radius: 18px;
-    }
-
-    @keyframes pop {
-      from { transform: translateY(6px); opacity: 0; }
-      to   { transform: translateY(0); opacity: 1; }
-    }
-
-    /* Layout (flexbox) */
-    .app{
-      min-height:100vh;
-      display:flex;
-      gap: 0;
-    }
-
-    .sidebar{
-      width: 280px;
-      background: var(--card);
-      box-shadow: var(--shadow-sm);
-      border-right: 1px solid var(--border);
-      padding: 18px;
-      display:flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .main{
-      flex:1;
-      display:flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .topbar{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 18px 20px;
-    }
-
-    .topbar__left{
-      display:flex;
-      flex-direction: column;
-      gap: 6px;
-      min-width: 280px;
-    }
-
-    .topbar__right{
-      display:flex;
-      align-items:flex-end;
-      justify-content:flex-end;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .content{
-      padding: 0 20px 24px;
-      display:flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .kpi{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .grid{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .grid > .card{
-      flex: 1 1 380px;
-      min-width: 320px;
-    }
-    .grid__wide{ flex-basis: 100%; }
-
-    /* Brand */
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      user-select:none;
-    }
-    .brand__logo{
-      width:44px;height:44px;
-      border-radius: 18px;
-      background: var(--brand-grad);
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight: 900;
-      box-shadow: 0 16px 34px rgba(99, 102, 241, 0.25);
-    }
-    .brand__name{ font-weight: 900; letter-spacing: -0.02em; }
-    .brand__sub{ color: var(--muted); font-size: 12px; margin-top: 2px; }
-
-    /* Nav */
-    .nav{
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .nav__item{
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--slate-600);
-      padding: 10px 12px;
-      border-radius: var(--r-20);
-      cursor:pointer;
-
-      display:flex;
-      align-items:center;
-      gap: 10px;
-
-      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-    }
-    .nav__item:hover{ transform: translateY(-1px); background: var(--brand-05); }
-    .nav__item:active{ transform: translateY(0) scale(0.99); }
-    .nav__item.is-active{
-      background: var(--brand-05);
-      border-color: var(--brand-15);
-      color: var(--text);
-      box-shadow: 0 18px 40px rgba(129, 140, 248, 0.12);
-    }
-    .nav__dot{
-      width:10px;height:10px;
-      border-radius: 999px;
-      background: var(--brand-15);
-      box-shadow: inset 0 0 0 2px var(--brand-300);
-    }
-
-    /* Sidebar footer */
-    .sidebar__footer{ margin-top:auto; }
-    .mini-card{
-      border-radius: var(--r-24);
-      border: 1px solid var(--border);
-      background: var(--brand-05);
-      padding: 12px;
-    }
-    .mini-card__title{ color: var(--muted); font-size: 12px; }
-    .mini-card__row{
-      margin-top: 10px;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    /* Typography */
-    .title{
-      margin:0;
-      font-size: 22px;
-      letter-spacing: -0.02em;
-      font-weight: 900;
-    }
-    .subtitle{
-      margin:0;
-      color: var(--muted);
-      line-height: 1.35;
-    }
-    .h2{
-      margin:0;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-    }
-    .muted{ color: var(--muted); }
-    .ta-r{ text-align:right; }
-
-    /* Card */
-    .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r-24);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      animation: pop 220ms ease both;
-      min-width: 0;
-    }
-    .card__title-row{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .card__head{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .card__label{ color: var(--muted); font-size: 12px; }
-    .card__value{ margin-top: 4px; font-size: 22px; font-weight: 900; }
-    .card__foot{
-      margin-top: 10px;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .kpi__card{ flex: 1 1 230px; min-width: 230px; }
-
-    /* Badges / trend */
-    .badge{
-      font-size: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--brand-05);
-      white-space: nowrap;
-    }
-    .badge--ok{
-      background: rgba(16,185,129,0.10);
-      border-color: rgba(16,185,129,0.25);
-      color: var(--green);
-    }
-    .badge--soft{
-      background: var(--brand-05);
-      border-color: var(--brand-15);
-    }
-
-    .trend{ font-weight: 900; font-size: 13px; }
-    .trend--up{ color: var(--green); }
-    .trend--down{ color: var(--red); }
-
-    /* Buttons */
-    .btn{
-      border: 1px solid transparent;
-      border-radius: var(--r-20);
-      padding: 10px 12px;
-      cursor:pointer;
-      background: var(--card);
-      color: var(--text);
-
-      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease, filter 160ms ease;
-      will-change: transform;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 18px 40px rgba(129, 140, 248, 0.14);
-    }
-    .btn:active{ transform: translateY(0) scale(0.99); }
-    .btn--ghost{
-      background: transparent;
-      border-color: var(--border-strong);
-    }
-    .btn--primary{
-      background: var(--brand-grad);
-      color: white;
-      box-shadow: 0 16px 34px rgba(99, 102, 241, 0.24);
-    }
-    .btn--primary:hover{ filter: brightness(1.02); }
-    .btn--sm{ padding: 8px 10px; border-radius: 18px; }
-
-    /* Segmented */
-    .segmented{
-      display:flex;
-      gap: 6px;
-      padding: 6px;
-      border-radius: var(--r-24);
-      border: 1px solid var(--border);
-      background: var(--brand-05);
-    }
-    .segmented__btn{
-      border: 1px solid transparent;
-      background: transparent;
-      padding: 8px 10px;
-      border-radius: 18px;
-      cursor:pointer;
-      color: var(--slate-600);
-
-      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-    }
-    .segmented__btn:hover{ transform: translateY(-1px); background: rgba(129,140,248,0.08); }
-    .segmented__btn:active{ transform: translateY(0) scale(0.99); }
-    .segmented__btn.is-active{
-      background: rgba(255,255,255,0.85);
-      border-color: var(--border);
-      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
-      color: var(--text);
-    }
-    :root[data-theme="dark"] .segmented__btn.is-active{
-      background: rgba(129,140,248,0.06);
-      border-color: var(--brand-15);
-      box-shadow: none;
-    }
-
-    /* Table */
-    .table{
-      border: 1px solid var(--border);
-      border-radius: var(--r-24);
-      overflow:hidden;
-    }
-    .table__head, .table__row{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-    }
-    .table__head{
-      padding: 10px 12px;
-      background: var(--brand-05);
-      color: var(--muted);
-      font-size: 12px;
-      user-select:none;
-    }
-    .table__head > div, .table__row > div{ flex: 1 1 0; min-width: 0; }
-    .table__head > div:last-child, .table__row > div:last-child{ flex: 0 0 120px; }
-
-    .table__body{ background: rgba(255,255,255,0.90); }
-    :root[data-theme="dark"] .table__body{ background: rgba(15, 23, 42, 0.25); }
-
-    .table__row{
-      padding: 12px;
-      border-top: 1px solid var(--border);
-      transition: background 160ms ease;
-    }
-    .table__row:hover{ background: rgba(129,140,248,0.07); }
-
-    .pair{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      min-width:0;
-    }
-    .pair__icon{
-      width: 30px;
-      height: 30px;
-      border-radius: 18px;
-      background: var(--brand-15);
-      box-shadow: inset 0 0 0 2px var(--brand-300);
-      flex: 0 0 auto;
-    }
-
-    /* Note */
-    .note{
-      padding: 10px 12px;
-      border-radius: var(--r-24);
-      border: 1px solid var(--border);
-      background: var(--brand-05);
-      color: var(--slate-600);
-    }
-
-    /* Controls */
-    .controls{
-      display:flex;
-      align-items:flex-end;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    /* Custom dropdown (fixes your screenshot issue) */
-    .dropdown{ position: relative; min-width: 170px; }
-    .dropdown__label{ font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    .dropdown__btn{
-      width: 100%;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-
-      padding: 10px 12px;
-      border-radius: var(--r-24);
-      border: 1px solid var(--border-strong);
-      background: rgba(255,255,255,0.85);
-      color: var(--text);
-      cursor:pointer;
-
-      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
-    }
-    .dropdown__btn:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 18px 40px rgba(129,140,248,0.14);
-    }
-    .dropdown__btn:active{ transform: translateY(0) scale(0.99); }
-
-    :root[data-theme="dark"] .dropdown__btn{
-      background: rgba(129,140,248,0.05);
-      border-color: rgba(129,140,248,0.15);
-    }
-
-    .dropdown__menu{
-      position:absolute;
-      left:0; right:0;
-      top: calc(100% + 8px);
-      border-radius: var(--r-24);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.98);
-      box-shadow: 0 20px 54px rgba(15,23,42,0.20);
-      overflow:hidden;
-      z-index: 9999;
-
-      opacity: 0;
-      transform: translateY(-8px) scale(0.98);
-      pointer-events: none;
-      transition: opacity 160ms ease, transform 160ms ease;
-    }
-    .dropdown.is-open .dropdown__menu{
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
-    :root[data-theme="dark"] .dropdown__menu{
-      background: rgba(15,23,42,0.98);
-      border-color: rgba(129,140,248,0.14);
-      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
-    }
-
-    .dropdown__item{
-      width:100%;
-      text-align:left;
-      padding: 10px 12px;
-      background: transparent;
-      border: 0;
-      color: var(--text);
-      cursor:pointer;
-
-      transition: background 140ms ease, transform 140ms ease;
-    }
-    .dropdown__item:hover{
-      background: rgba(129,140,248,0.10);
-      transform: translateX(2px);
-    }
-    .dropdown__item.is-active{
-      background: rgba(129,140,248,0.15);
-    }
-
-    /* Responsive */
-    @media (max-width: 980px){
-      .sidebar{ width: 240px; }
-      .topbar{ align-items:flex-start; }
-    }
-    @media (max-width: 820px){
-      .app{ flex-direction: column; }
-      .sidebar{ width: auto; border-right: none; border-bottom: 1px solid var(--border); }
-      .topbar{ flex-direction: column; align-items: stretch; }
-      .topbar__right{ justify-content:flex-start; }
-      .dropdown{ min-width: 160px; }
-    }
-    @media (max-width: 480px){
-      .content{ padding: 0 12px 18px; }
-      .topbar{ padding: 14px 12px; }
-      .card{ padding: 12px; }
-      .table__head > div:last-child, .table__row > div:last-child{ flex-basis: 92px; }
-      .dropdown{ min-width: 140px; }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
 </head>
 
 <body>
   <div class="app">
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="brand">
         <div class="brand__logo">EX</div>
-        <div>
+        <div class="brand__text">
           <div class="brand__name">Exchange</div>
           <div class="brand__sub">Dashboard</div>
         </div>
       </div>
 
       <nav class="nav">
-        <button class="nav__item is-active" data-i18n="nav.overview"><span class="nav__dot"></span>Overview</button>
-        <button class="nav__item" data-i18n="nav.markets"><span class="nav__dot"></span>Markets</button>
-        <button class="nav__item" data-i18n="nav.orders"><span class="nav__dot"></span>Orders</button>
-        <button class="nav__item" data-i18n="nav.wallet"><span class="nav__dot"></span>Wallet</button>
-        <button class="nav__item" data-i18n="nav.settings"><span class="nav__dot"></span>Settings</button>
+        <button class="nav__item is-active" data-view="overview" data-i18n="nav.overview">
+          <span class="nav__dot"></span> Overview
+        </button>
+        <button class="nav__item" data-view="markets" data-i18n="nav.markets">
+          <span class="nav__dot"></span> Markets
+        </button>
+        <button class="nav__item" data-view="orders" data-i18n="nav.orders">
+          <span class="nav__dot"></span> Orders
+        </button>
+        <button class="nav__item" data-view="wallet" data-i18n="nav.wallet">
+          <span class="nav__dot"></span> Wallet
+        </button>
+        <button class="nav__item" data-view="settings" data-i18n="nav.settings">
+          <span class="nav__dot"></span> Settings
+        </button>
       </nav>
 
       <div class="sidebar__footer">
@@ -549,7 +53,7 @@
       </div>
     </aside>
 
-    <!-- Main -->
+    <!-- MAIN -->
     <div class="main">
       <header class="topbar">
         <div class="topbar__left">
@@ -559,18 +63,18 @@
 
         <div class="topbar__right">
           <div class="controls">
-            <!-- Language dropdown (NO Ukrainian) -->
+            <!-- Language dropdown (без української) -->
             <div class="dropdown" id="langDrop">
               <div class="dropdown__label" data-i18n="ui.language">Language</div>
               <button class="dropdown__btn" type="button" id="langBtn" aria-expanded="false">
-                <span id="langValue">English</span>
-                <span aria-hidden="true">▾</span>
+                <span class="dropdown__value" id="langValue">English</span>
+                <span class="dropdown__icon" aria-hidden="true">▾</span>
               </button>
-              <div class="dropdown__menu" id="langMenu">
-                <button class="dropdown__item" type="button" data-value="en">English</button>
-                <button class="dropdown__item" type="button" data-value="ru">Русский</button>
-                <button class="dropdown__item" type="button" data-value="es">Español</button>
-                <button class="dropdown__item" type="button" data-value="fr">Français</button>
+              <div class="dropdown__menu" id="langMenu" role="listbox">
+                <button class="dropdown__item" type="button" role="option" data-value="en">English</button>
+                <button class="dropdown__item" type="button" role="option" data-value="ru">Русский</button>
+                <button class="dropdown__item" type="button" role="option" data-value="es">Español</button>
+                <button class="dropdown__item" type="button" role="option" data-value="fr">Français</button>
               </div>
             </div>
 
@@ -578,12 +82,12 @@
             <div class="dropdown" id="themeDrop">
               <div class="dropdown__label" data-i18n="ui.theme">Theme</div>
               <button class="dropdown__btn" type="button" id="themeBtn" aria-expanded="false">
-                <span id="themeValue">Light</span>
-                <span aria-hidden="true">▾</span>
+                <span class="dropdown__value" id="themeValue">Light</span>
+                <span class="dropdown__icon" aria-hidden="true">▾</span>
               </button>
-              <div class="dropdown__menu" id="themeMenu">
-                <button class="dropdown__item" type="button" data-value="light" data-i18n="ui.themeLight">Light</button>
-                <button class="dropdown__item" type="button" data-value="dark" data-i18n="ui.themeDark">Dark</button>
+              <div class="dropdown__menu" id="themeMenu" role="listbox">
+                <button class="dropdown__item" type="button" role="option" data-value="light" data-i18n="ui.themeLight">Light</button>
+                <button class="dropdown__item" type="button" role="option" data-value="dark" data-i18n="ui.themeDark">Dark</button>
               </div>
             </div>
           </div>
@@ -594,7 +98,6 @@
       </header>
 
       <main class="content">
-        <!-- KPI -->
         <section class="kpi">
           <article class="card kpi__card">
             <div class="card__head">
@@ -654,7 +157,6 @@
         </section>
 
         <section class="grid">
-          <!-- Markets -->
           <article class="card">
             <div class="card__title-row">
               <h2 class="h2" data-i18n="sec.markets">Markets</h2>
@@ -676,29 +178,27 @@
             </div>
           </article>
 
-          <!-- Quick order -->
           <article class="card">
             <div class="card__title-row">
               <h2 class="h2" data-i18n="sec.quickOrder">Quick order</h2>
               <span class="badge badge--soft">Demo</span>
             </div>
 
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-              <button class="btn" style="flex:1; border-color: rgba(16,185,129,0.25); background: rgba(16,185,129,0.10); color: var(--green);" data-i18n="btn.buy">Buy</button>
-              <button class="btn" style="flex:1; border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.10); color: var(--red);" data-i18n="btn.sell">Sell</button>
+            <div class="order__actions">
+              <button class="btn btn--success" data-i18n="btn.buy">Buy</button>
+              <button class="btn btn--danger" data-i18n="btn.sell">Sell</button>
             </div>
 
             <div class="note" data-i18n="note.tip">Tip: click Refresh to see prices move in the table.</div>
           </article>
 
-          <!-- Recent trades -->
           <article class="card grid__wide">
             <div class="card__title-row">
               <h2 class="h2" data-i18n="sec.recentTrades">Recent trades</h2>
               <button class="btn btn--ghost btn--sm" id="btnAddTrade" data-i18n="btn.addTrade">Add demo trade</button>
             </div>
 
-            <div class="table">
+            <div class="table table--compact">
               <div class="table__head">
                 <div data-i18n="tbl.time">Time</div>
                 <div data-i18n="tbl.pair">Pair</div>
@@ -714,451 +214,6 @@
     </div>
   </div>
 
-  <script>
-    const THEME_KEY = "ex.theme";
-    const LANG_KEY = "ex.lang";
-
-    const I18N = {
-      en: {
-        "ui.language":"Language",
-        "ui.theme":"Theme",
-        "ui.themeLight":"Light",
-        "ui.themeDark":"Dark",
-
-        "title.overview":"Exchange Overview",
-        "subtitle.overview":"Key metrics, markets, and recent trades.",
-
-        "btn.refresh":"Refresh",
-        "btn.createOrder":"Create order",
-        "btn.addTrade":"Add demo trade",
-        "btn.buy":"Buy",
-        "btn.sell":"Sell",
-
-        "nav.overview":"Overview",
-        "nav.markets":"Markets",
-        "nav.orders":"Orders",
-        "nav.wallet":"Wallet",
-        "nav.settings":"Settings",
-
-        "status.title":"Status",
-        "status.online":"Online",
-        "status.api":"API: Connected",
-
-        "kpi.balance":"Balance",
-        "kpi.pnl":"PnL",
-        "kpi.volume":"Volume",
-        "kpi.openOrders":"Open orders",
-
-        "meta.24h":"last 24h",
-        "meta.week":"this week",
-        "meta.profit":"Profit",
-        "meta.active":"Active",
-        "meta.updated":"Last update:",
-
-        "sec.markets":"Markets",
-        "sec.quickOrder":"Quick order",
-        "sec.recentTrades":"Recent trades",
-
-        "seg.all":"All",
-        "seg.gainers":"Gainers",
-        "seg.losers":"Losers",
-
-        "tbl.time":"Time",
-        "tbl.pair":"Pair",
-        "tbl.side":"Side",
-        "tbl.price":"Price",
-        "tbl.change":"24h",
-        "tbl.volume":"Volume",
-        "tbl.qty":"Qty",
-
-        "note.tip":"Tip: click Refresh to see prices move in the table.",
-        "side.buy":"Buy",
-        "side.sell":"Sell"
-      },
-      ru: {
-        "ui.language":"Язык",
-        "ui.theme":"Тема",
-        "ui.themeLight":"Светлая",
-        "ui.themeDark":"Тёмная",
-
-        "title.overview":"Обзор биржи",
-        "subtitle.overview":"Ключевые метрики, рынки и последние сделки.",
-
-        "btn.refresh":"Обновить",
-        "btn.createOrder":"Создать ордер",
-        "btn.addTrade":"Добавить демо-сделку",
-        "btn.buy":"Купить",
-        "btn.sell":"Продать",
-
-        "nav.overview":"Обзор",
-        "nav.markets":"Рынки",
-        "nav.orders":"Ордера",
-        "nav.wallet":"Кошелёк",
-        "nav.settings":"Настройки",
-
-        "status.title":"Статус",
-        "status.online":"Online",
-        "status.api":"API: Connected",
-
-        "kpi.balance":"Баланс",
-        "kpi.pnl":"PnL",
-        "kpi.volume":"Объём",
-        "kpi.openOrders":"Открытые ордера",
-
-        "meta.24h":"за 24 ч",
-        "meta.week":"за неделю",
-        "meta.profit":"Profit",
-        "meta.active":"Active",
-        "meta.updated":"Последнее обновление:",
-
-        "sec.markets":"Рынки",
-        "sec.quickOrder":"Быстрый ордер",
-        "sec.recentTrades":"Последние сделки",
-
-        "seg.all":"Все",
-        "seg.gainers":"Растут",
-        "seg.losers":"Падают",
-
-        "tbl.time":"Время",
-        "tbl.pair":"Пара",
-        "tbl.side":"Сторона",
-        "tbl.price":"Цена",
-        "tbl.change":"24ч",
-        "tbl.volume":"Объём",
-        "tbl.qty":"Кол-во",
-
-        "note.tip":"Совет: нажми Обновить, чтобы увидеть “движение” цен в таблице.",
-        "side.buy":"Buy",
-        "side.sell":"Sell"
-      },
-      es: {
-        "ui.language":"Idioma",
-        "ui.theme":"Tema",
-        "ui.themeLight":"Claro",
-        "ui.themeDark":"Oscuro",
-
-        "title.overview":"Resumen del Exchange",
-        "subtitle.overview":"Métricas clave, mercados y operaciones recientes.",
-
-        "btn.refresh":"Actualizar",
-        "btn.createOrder":"Crear orden",
-        "btn.addTrade":"Añadir operación demo",
-        "btn.buy":"Comprar",
-        "btn.sell":"Vender",
-
-        "nav.overview":"Resumen",
-        "nav.markets":"Mercados",
-        "nav.orders":"Órdenes",
-        "nav.wallet":"Billetera",
-        "nav.settings":"Ajustes",
-
-        "status.title":"Estado",
-        "status.online":"Online",
-        "status.api":"API: Connected",
-
-        "kpi.balance":"Balance",
-        "kpi.pnl":"PnL",
-        "kpi.volume":"Volumen",
-        "kpi.openOrders":"Órdenes abiertas",
-
-        "meta.24h":"últimas 24h",
-        "meta.week":"esta semana",
-        "meta.profit":"Profit",
-        "meta.active":"Active",
-        "meta.updated":"Última actualización:",
-
-        "sec.markets":"Mercados",
-        "sec.quickOrder":"Orden rápida",
-        "sec.recentTrades":"Operaciones recientes",
-
-        "seg.all":"Todos",
-        "seg.gainers":"Suben",
-        "seg.losers":"Bajan",
-
-        "tbl.time":"Hora",
-        "tbl.pair":"Par",
-        "tbl.side":"Lado",
-        "tbl.price":"Precio",
-        "tbl.change":"24h",
-        "tbl.volume":"Volumen",
-        "tbl.qty":"Cant.",
-
-        "note.tip":"Consejo: pulsa Actualizar para ver cómo se mueven los precios.",
-        "side.buy":"Buy",
-        "side.sell":"Sell"
-      },
-      fr: {
-        "ui.language":"Langue",
-        "ui.theme":"Thème",
-        "ui.themeLight":"Clair",
-        "ui.themeDark":"Sombre",
-
-        "title.overview":"Aperçu de l’exchange",
-        "subtitle.overview":"Indicateurs clés, marchés et transactions récentes.",
-
-        "btn.refresh":"Actualiser",
-        "btn.createOrder":"Créer un ordre",
-        "btn.addTrade":"Ajouter une transaction démo",
-        "btn.buy":"Acheter",
-        "btn.sell":"Vendre",
-
-        "nav.overview":"Aperçu",
-        "nav.markets":"Marchés",
-        "nav.orders":"Ordres",
-        "nav.wallet":"Portefeuille",
-        "nav.settings":"Paramètres",
-
-        "status.title":"Statut",
-        "status.online":"Online",
-        "status.api":"API: Connected",
-
-        "kpi.balance":"Solde",
-        "kpi.pnl":"PnL",
-        "kpi.volume":"Volume",
-        "kpi.openOrders":"Ordres ouverts",
-
-        "meta.24h":"dernières 24h",
-        "meta.week":"cette semaine",
-        "meta.profit":"Profit",
-        "meta.active":"Active",
-        "meta.updated":"Dernière mise à jour :",
-
-        "sec.markets":"Marchés",
-        "sec.quickOrder":"Ordre rapide",
-        "sec.recentTrades":"Transactions récentes",
-
-        "seg.all":"Tous",
-        "seg.gainers":"En hausse",
-        "seg.losers":"En baisse",
-
-        "tbl.time":"Heure",
-        "tbl.pair":"Paire",
-        "tbl.side":"Sens",
-        "tbl.price":"Prix",
-        "tbl.change":"24h",
-        "tbl.volume":"Volume",
-        "tbl.qty":"Qté",
-
-        "note.tip":"Astuce : clique sur Actualiser pour voir les prix bouger.",
-        "side.buy":"Buy",
-        "side.sell":"Sell"
-      }
-    };
-
-    const LANG_NAME = { en:"English", ru:"Русский", es:"Español", fr:"Français" };
-    const $ = (s) => document.querySelector(s);
-    const $$ = (s) => document.querySelectorAll(s);
-
-    const markets = [
-      { pair: "BTC/USDT", price: 67120.45, change: 1.42, volume: 532_120_000 },
-      { pair: "ETH/USDT", price: 3540.12,  change: -0.88, volume: 211_540_000 },
-      { pair: "SOL/USDT", price: 188.67,   change: 2.31, volume: 98_120_000 },
-      { pair: "XRP/USDT", price: 0.6124,   change: -1.12, volume: 64_210_000 },
-      { pair: "ADA/USDT", price: 0.4851,   change: 0.37, volume: 41_900_000 },
-    ];
-
-    const trades = [
-      { time: "20:41:05", pair: "BTC/USDT", side: "buy",  price: 67090.10, qty: 0.012 },
-      { time: "20:40:22", pair: "ETH/USDT", side: "sell", price: 3542.55,  qty: 0.44 },
-      { time: "20:39:50", pair: "SOL/USDT", side: "buy",  price: 188.12,   qty: 12.5 },
-    ];
-
-    function t(lang, key){ return I18N[lang]?.[key] ?? I18N.en[key] ?? key; }
-
-    function fmtMoney(n){ return new Intl.NumberFormat("en-US",{ maximumFractionDigits: 2 }).format(n); }
-    function fmtVol(n){
-      if (n >= 1_000_000_000) return (n/1_000_000_000).toFixed(2) + "B";
-      if (n >= 1_000_000) return (n/1_000_000).toFixed(2) + "M";
-      if (n >= 1_000) return (n/1_000).toFixed(2) + "K";
-      return String(n);
-    }
-
-    function getLang(){ return localStorage.getItem(LANG_KEY) || "en"; }
-    function getTheme(){ return localStorage.getItem(THEME_KEY) || "light"; }
-
-    function setLastUpdate(){
-      const d = new Date();
-      $("#lastUpdate").textContent =
-        `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;
-    }
-
-    function renderMarkets(list){
-      const el = $("#marketsTable");
-      el.innerHTML = "";
-      for (const m of list){
-        const row = document.createElement("div");
-        row.className = "table__row";
-        const up = m.change >= 0;
-        row.innerHTML = `
-          <div class="pair">
-            <div class="pair__icon"></div>
-            <div style="min-width:0">
-              <div style="font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.pair}</div>
-              <div class="muted" style="font-size:12px;">Spot</div>
-            </div>
-          </div>
-          <div>$${fmtMoney(m.price)}</div>
-          <div class="trend ${up ? "trend--up":"trend--down"}">${up ? "▲":"▼"} ${Math.abs(m.change).toFixed(2)}%</div>
-          <div class="ta-r">$${fmtVol(m.volume)}</div>
-        `;
-        el.appendChild(row);
-      }
-    }
-
-    function renderTrades(){
-      const el = $("#tradesTable");
-      el.innerHTML = "";
-      const lang = getLang();
-      for (const tr of trades){
-        const row = document.createElement("div");
-        row.className = "table__row";
-        const buy = tr.side === "buy";
-        row.innerHTML = `
-          <div>${tr.time}</div>
-          <div style="font-weight:900">${tr.pair}</div>
-          <div class="trend ${buy ? "trend--up":"trend--down"}">${t(lang, buy ? "side.buy":"side.sell")}</div>
-          <div class="ta-r">$${fmtMoney(tr.price)}</div>
-          <div class="ta-r">${tr.qty}</div>
-        `;
-        el.appendChild(row);
-      }
-    }
-
-    function nudgePrices(){
-      for (const m of markets){
-        const drift = (Math.random() - 0.5) * 0.6;
-        m.change = Math.max(-9.99, Math.min(9.99, m.change + drift));
-        m.price = m.price * (1 + drift/100);
-        m.volume = Math.max(0, Math.floor(m.volume * (1 + (Math.random() - 0.5) * 0.02)));
-      }
-    }
-
-    function applyLang(lang){
-      document.documentElement.lang = lang;
-      localStorage.setItem(LANG_KEY, lang);
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        el.textContent = t(lang, el.dataset.i18n);
-      });
-
-      // dropdown visible values
-      $("#langValue").textContent = LANG_NAME[lang] || "English";
-      $("#themeValue").textContent = t(lang, getTheme() === "dark" ? "ui.themeDark" : "ui.themeLight");
-
-      // mark active in menu
-      $("#langMenu").querySelectorAll(".dropdown__item").forEach(btn=>{
-        btn.classList.toggle("is-active", btn.dataset.value === lang);
-      });
-
-      renderTrades();
-    }
-
-    function applyTheme(theme){
-      document.documentElement.dataset.theme = theme;
-      localStorage.setItem(THEME_KEY, theme);
-      const lang = getLang();
-      $("#themeValue").textContent = t(lang, theme === "dark" ? "ui.themeDark" : "ui.themeLight");
-      $("#themeMenu").querySelectorAll(".dropdown__item").forEach(btn=>{
-        btn.classList.toggle("is-active", btn.dataset.value === theme);
-      });
-    }
-
-    function closeDropdowns(){
-      $$(".dropdown").forEach(d=>{
-        d.classList.remove("is-open");
-        const b = d.querySelector("button");
-        if (b) b.setAttribute("aria-expanded", "false");
-      });
-    }
-    function toggleDropdown(dropEl){
-      const isOpen = dropEl.classList.contains("is-open");
-      closeDropdowns();
-      if (!isOpen){
-        dropEl.classList.add("is-open");
-        const b = dropEl.querySelector("button");
-        if (b) b.setAttribute("aria-expanded", "true");
-      }
-    }
-
-    function initDropdowns(){
-      $("#langBtn").addEventListener("click",(e)=>{ e.stopPropagation(); toggleDropdown($("#langDrop")); });
-      $("#themeBtn").addEventListener("click",(e)=>{ e.stopPropagation(); toggleDropdown($("#themeDrop")); });
-
-      $("#langMenu").addEventListener("click",(e)=>{
-        const item = e.target.closest(".dropdown__item");
-        if (!item) return;
-        applyLang(item.dataset.value);
-        closeDropdowns();
-      });
-
-      $("#themeMenu").addEventListener("click",(e)=>{
-        const item = e.target.closest(".dropdown__item");
-        if (!item) return;
-        applyTheme(item.dataset.value);
-        closeDropdowns();
-      });
-
-      document.addEventListener("click", closeDropdowns);
-      document.addEventListener("keydown", (e)=>{ if (e.key === "Escape") closeDropdowns(); });
-    }
-
-    function initUI(){
-      // nav active
-      $$(".nav__item").forEach(btn=>{
-        btn.addEventListener("click",()=>{
-          $$(".nav__item").forEach(b=>b.classList.remove("is-active"));
-          btn.classList.add("is-active");
-        });
-      });
-
-      // segmented filter
-      $$(".segmented__btn").forEach(btn=>{
-        btn.addEventListener("click",()=>{
-          $$(".segmented__btn").forEach(b=>b.classList.remove("is-active"));
-          btn.classList.add("is-active");
-          const mode = btn.dataset.filter;
-          if (mode === "gainers") renderMarkets(markets.filter(m=>m.change>=0));
-          else if (mode === "losers") renderMarkets(markets.filter(m=>m.change<0));
-          else renderMarkets(markets);
-        });
-      });
-
-      $("#btnRefresh").addEventListener("click", ()=>{
-        nudgePrices();
-        const active = document.querySelector(".segmented__btn.is-active")?.dataset.filter || "all";
-        if (active === "gainers") renderMarkets(markets.filter(m=>m.change>=0));
-        else if (active === "losers") renderMarkets(markets.filter(m=>m.change<0));
-        else renderMarkets(markets);
-        setLastUpdate();
-      });
-
-      $("#btnAddTrade").addEventListener("click", ()=>{
-        const pairs = ["BTC/USDT","ETH/USDT","SOL/USDT","XRP/USDT"];
-        const side = Math.random()>0.5 ? "buy":"sell";
-        const pair = pairs[Math.floor(Math.random()*pairs.length)];
-        const price = 10 + Math.random()*70000;
-        const qty = +(Math.random()*2).toFixed(3);
-
-        const d = new Date();
-        const time = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}:${String(d.getSeconds()).padStart(2,"0")}`;
-
-        trades.unshift({ time, pair, side, price, qty });
-        trades.splice(10);
-        renderTrades();
-        setLastUpdate();
-      });
-    }
-
-    (function start(){
-      initDropdowns();
-      initUI();
-
-      applyTheme(getTheme());
-      applyLang(getLang());
-
-      renderMarkets(markets);
-      renderTrades();
-      setLastUpdate();
-    })();
-  </script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
