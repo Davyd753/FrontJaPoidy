@@ -1,27 +1,48 @@
-.app{ min-height:100vh; display:flex; }
+.app{
+  min-height:100vh;
+  display:flex;
+}
 
 .sidebar{
-  width: 270px;
+  width: 280px;
   padding: 18px;
   background: var(--card);
   box-shadow: var(--shadow-sm);
+  border-right: 1px solid var(--border);
   display:flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.main{ flex:1; display:flex; flex-direction: column; }
+.main{
+  flex:1;
+  display:flex;
+  flex-direction: column;
+  min-width: 0;
+}
 
 .topbar{
   padding: 18px 20px;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content: space-between;
   gap: 16px;
 }
 
-.topbar__left{ display:flex; flex-direction:column; }
-.topbar__right{ display:flex; align-items:flex-end; gap: 10px; flex-wrap: wrap; }
+.topbar__left{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 280px;
+}
+
+.topbar__right{
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
 .content{
   padding: 0 20px 24px;
@@ -36,6 +57,15 @@
   flex-wrap: wrap;
 }
 
-.grid{ display:flex; flex-wrap: wrap; gap: 12px; }
-.grid > .card{ flex: 1 1 380px; min-width: 320px; }
-.grid__wide{ flex-basis: 100%; }
+.grid{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.grid > .card{
+  flex: 1 1 380px;
+  min-width: 320px;
+}
+.grid__wide{
+  flex-basis: 100%;
+}
