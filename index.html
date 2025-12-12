@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exchange Dashboard</title>
+
+  <!-- CSS: від змінних → база → layout → компоненти → адаптив -->
+  <link rel="stylesheet" href="assets/css/variables.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+</head>
+
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand__logo">EX</div>
+        <div class="brand__text">
+          <div class="brand__name">Exchange</div>
+          <div class="brand__sub">Dashboard</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav__item is-active" data-view="overview">
+          <span class="nav__dot"></span> Огляд
+        </button>
+        <button class="nav__item" data-view="markets">
+          <span class="nav__dot"></span> Ринки
+        </button>
+        <button class="nav__item" data-view="orders">
+          <span class="nav__dot"></span> Ордери
+        </button>
+        <button class="nav__item" data-view="wallet">
+          <span class="nav__dot"></span> Гаманець
+        </button>
+        <button class="nav__item" data-view="settings">
+          <span class="nav__dot"></span> Налаштування
+        </button>
+      </nav>
+
+      <div class="sidebar__footer">
+        <div class="mini-card">
+          <div class="mini-card__title">Статус</div>
+          <div class="mini-card__row">
+            <span class="badge badge--ok">Online</span>
+            <span class="muted">API: Connected</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="topbar__left">
+          <h1 class="title">Огляд біржі</h1>
+          <p class="subtitle">Ключові метрики, ринки та останні угоди.</p>
+        </div>
+
+        <div class="topbar__right">
+          <div class="search">
+            <input class="search__input" type="search" placeholder="Пошук: BTC, ETH…" />
+          </div>
+
+          <button class="btn btn--ghost" id="btnRefresh">Оновити</button>
+          <button class="btn btn--primary">Створити ордер</button>
+        </div>
+      </header>
+
+      <!-- CONTENT -->
+      <main class="content">
+        <!-- KPI -->
+        <section class="kpi">
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label">Баланс</div>
+                <div class="card__value" id="balance">$12,480.55</div>
+              </div>
+              <span class="badge badge--soft">USD</span>
+            </div>
+            <div class="card__foot">
+              <span class="trend trend--up">▲ +2.4%</span>
+              <span class="muted">за 24 год</span>
+            </div>
+          </article>
+
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label">PnL</div>
+                <div class="card__value" id="pnl">+$342.10</div>
+              </div>
+              <span class="badge badge--ok">Profit</span>
+            </div>
+            <div class="card__foot">
+              <span class="trend trend--up">▲ +1.1%</span>
+              <span class="muted">за тиждень</span>
+            </div>
+          </article>
+
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label">Обсяг</div>
+                <div class="card__value" id="volume">$1.28M</div>
+              </div>
+              <span class="badge badge--soft">Spot</span>
+            </div>
+            <div class="card__foot">
+              <span class="trend trend--down">▼ -0.6%</span>
+              <span class="muted">за 24 год</span>
+            </div>
+          </article>
+
+          <article class="card kpi__card">
+            <div class="card__head">
+              <div>
+                <div class="card__label">Відкриті ордери</div>
+                <div class="card__value" id="openOrders">7</div>
+              </div>
+              <span class="badge badge--soft">Active</span>
+            </div>
+            <div class="card__foot">
+              <span class="muted">Останнє оновлення:</span>
+              <span class="muted" id="lastUpdate">—</span>
+            </div>
+          </article>
+        </section>
+
+        <!-- GRID -->
+        <section class="grid">
+          <!-- Markets -->
+          <article class="card">
+            <div class="card__title-row">
+              <h2 class="h2">Ринки</h2>
+              <div class="segmented" role="tablist">
+                <button class="segmented__btn is-active" data-filter="all">Усі</button>
+                <button class="segmented__btn" data-filter="gainers">Зростають</button>
+                <button class="segmented__btn" data-filter="losers">Падають</button>
+              </div>
+            </div>
+
+            <div class="table">
+              <div class="table__head">
+                <div>Пара</div>
+                <div>Ціна</div>
+                <div>24h</div>
+                <div class="ta-r">Обсяг</div>
+              </div>
+              <div class="table__body" id="marketsTable"></div>
+            </div>
+          </article>
+
+          <!-- Order panel -->
+          <article class="card">
+            <div class="card__title-row">
+              <h2 class="h2">Швидкий ордер</h2>
+              <span class="badge badge--soft">Demo</span>
+            </div>
+
+            <div class="order">
+              <div class="order__row">
+                <label class="field">
+                  <span class="field__label">Пара</span>
+                  <select class="field__control" id="pairSelect">
+                    <option>BTC/USDT</option>
+                    <option>ETH/USDT</option>
+                    <option>SOL/USDT</option>
+                    <option>XRP/USDT</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span class="field__label">Тип</span>
+                  <select class="field__control" id="typeSelect">
+                    <option>Market</option>
+                    <option>Limit</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="order__row">
+                <label class="field">
+                  <span class="field__label">Сума</span>
+                  <input class="field__control" type="number" min="0" step="0.01" value="100" />
+                </label>
+
+                <label class="field">
+                  <span class="field__label">Кредитне плече</span>
+                  <input class="field__control" type="number" min="1" max="10" step="1" value="1" />
+                </label>
+              </div>
+
+              <div class="order__actions">
+                <button class="btn btn--success">Buy</button>
+                <button class="btn btn--danger">Sell</button>
+              </div>
+
+              <div class="note">
+                Порада: натисни <b>Оновити</b>, щоб побачити “рух” цін у таблиці.
+              </div>
+            </div>
+          </article>
+
+          <!-- Recent trades -->
+          <article class="card grid__wide">
+            <div class="card__title-row">
+              <h2 class="h2">Останні угоди</h2>
+              <button class="btn btn--ghost btn--sm" id="btnAddTrade">Додати демо-угоду</button>
+            </div>
+
+            <div class="table table--compact">
+              <div class="table__head">
+                <div>Час</div>
+                <div>Пара</div>
+                <div>Сторона</div>
+                <div class="ta-r">Ціна</div>
+                <div class="ta-r">К-сть</div>
+              </div>
+              <div class="table__body" id="tradesTable"></div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

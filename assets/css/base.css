@@ -1,0 +1,26 @@
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+  color:var(--text);
+  background: var(--bg);
+}
+
+button,input,select{
+  font: inherit;
+}
+
+.muted{ color:var(--muted); }
+.ta-r{ text-align:right; }
+
+.title{ margin:0; font-size: 22px; letter-spacing: -0.02em; }
+.subtitle{ margin:6px 0 0; color:var(--muted); }
+
+.h2{ margin:0; font-size: 16px; letter-spacing: -0.01em; }
+
+:focus-visible{
+  outline:none;
+  box-shadow: var(--ring);
+  border-radius: 10px;
+}
